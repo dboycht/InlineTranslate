@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>行内翻译 · 设置</title>
+<link rel="stylesheet" href="options.css">
+</head>
+<body>
+<main class="wrap">
+  <h1>行内翻译 <span class="ver">v1.00.2</span></h1>
+  <p class="sub">在网页每段文字下方显示译文（不覆盖原文），支持翻译 API 与 AI 大模型。</p>
+
+  <section>
+    <h2>① 选择翻译服务</h2>
+    <div id="providerList" class="grid"></div>
+  </section>
+
+  <section id="configSection">
+    <h2>② 服务配置</h2>
+    <div id="fields"></div>
+    <div id="applyLink" class="apply"></div>
+  </section>
+
+  <section>
+    <h2>③ 通用设置</h2>
+    <div class="form-item">
+      <label for="targetLang">目标语言</label>
+      <select id="targetLang"></select>
+    </div>
+    <div class="form-item">
+      <label for="maxChars">每批最大字符数
+        <span class="hint">（AI 模型单次请求的文本量，默认 1200；越小越不容易出错）</span>
+      </label>
+      <input id="maxChars" type="number" min="200" max="4000" step="100">
+    </div>
+  </section>
+
+  <section class="actions">
+    <button id="saveBtn" class="btn primary">保存设置</button>
+    <button id="testBtn" class="btn">测试连接</button>
+    <button id="resetBtn" class="btn ghost">恢复默认</button>
+  </section>
+
+  <div id="msg" class="msg"></div>
+</main>
+
+<script src="providers.js"></script>
+<script src="options.js"></script>
+</body>
+</html>

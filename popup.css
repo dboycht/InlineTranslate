@@ -1,0 +1,85 @@
+body {
+  width: 280px;
+  margin: 0;
+  font-family: system-ui, "Segoe UI", "Microsoft YaHei", sans-serif;
+  font-size: 13px;
+  background: #f7f8fa;
+  color: #222;
+}
+
+header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 14px 8px;
+}
+
+.logo { font-size: 15px; font-weight: 600; }
+.ver { font-size: 11px; color: #999; }
+
+.status {
+  margin: 0 14px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #666;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.status a { color: #4a7dff; }
+
+.lang-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px 10px;
+}
+
+.lang-row select {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  background: #fff;
+}
+
+.btn {
+  border: 1px solid #d1d5db;
+  background: #fff;
+  border-radius: 8px;
+  padding: 9px 0;
+  font-size: 13px;
+  cursor: pointer;
+  color: #333;
+}
+
+.btn:hover { background: #f1f3f5; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.btn.primary {
+  width: calc(100% - 28px);
+  margin: 0 14px 10px;
+  background: #4a7dff;
+  border-color: #4a7dff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn.primary:hover { background: #3a6cf0; }
+
+.btn.ghost {
+  width: calc(100% - 28px);
+  margin: 0 14px 12px;
+  border-style: dashed;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  padding: 0 14px 10px;
+}
+
+.row .btn { flex: 1; }

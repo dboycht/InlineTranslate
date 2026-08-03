@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>行内翻译</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<header>
+  <span class="logo">行内翻译</span>
+  <span class="ver">v1.00.2</span>
+</header>
+
+<div id="status" class="status"></div>
+
+<div class="lang-row">
+  <label for="lang">目标语言</label>
+  <select id="lang"></select>
+</div>
+
+<button id="translateBtn" class="btn primary">翻译此页</button>
+
+<div class="row">
+  <button id="toggleBtn" class="btn">隐藏译文</button>
+  <button id="removeBtn" class="btn">移除译文</button>
+</div>
+
+<button id="optionsBtn" class="btn ghost">设置</button>
+
+<script src="providers.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

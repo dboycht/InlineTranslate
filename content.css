@@ -1,0 +1,105 @@
+/* 行内翻译 · 译文样式
+   目标：译文直接嵌入页面、与原文风格统一，且不破坏原网页布局：
+   - 段落（块级）→ 译文作为独立段落显示在原文下方（.vt-block）
+   - 横向项（菜单 / 标签 / 分栏项）→ 译文位于该项内部、单词下方，横排保持不变（.vt-item）
+   - 行内元素 → 译文以行内块跟在原文右侧（.vt-flow） */
+
+.vt-block {
+  display: block;
+  box-sizing: border-box;
+  margin: 0.45em 0 0.65em !important;
+  padding: 0;
+  border: none;
+  background: none;
+  font-size: 0.95em;
+  line-height: inherit;
+  text-align: inherit;
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* 横向项内部：紧凑、不撑破所在行 */
+.vt-block.vt-item {
+  margin: 3px 0 0 !important;
+  font-size: 0.9em;
+  line-height: 1.35;
+}
+
+/* 行内元素右侧 */
+.vt-block.vt-flow {
+  display: inline-block;
+  margin: 0 0 0 8px !important;
+  font-size: 0.9em;
+}
+
+/* 低调的「译」角标：悬停才明显，点击复制该段译文 */
+.vt-block .vt-badge {
+  float: right;
+  font-size: 10px;
+  line-height: 1.6;
+  color: inherit;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  padding: 0 5px;
+  margin-left: 8px;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.3;
+  transition: opacity 0.15s;
+}
+
+.vt-block .vt-badge:hover {
+  opacity: 1;
+}
+
+.vt-block .vt-text {
+  margin: 0;
+  word-break: break-word;
+}
+
+/* 一键隐藏译文（html 上挂 vt-hidden 类） */
+html.vt-hidden .vt-block {
+  display: none !important;
+}
+
+/* 翻译进度浮窗 */
+.vt-progress {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(20, 20, 30, 0.85);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font: 13px/1.5 system-ui, "Segoe UI", sans-serif;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+}
+
+.vt-progress .vt-cancel {
+  cursor: pointer;
+  color: #ff9b9b;
+  border: none;
+  background: none;
+  font: inherit;
+  padding: 0;
+}
+
+/* 底部提示 */
+.vt-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  max-width: 80%;
+  background: rgba(20, 20, 30, 0.9);
+  color: #fff;
+  padding: 9px 18px;
+  border-radius: 20px;
+  font: 13px/1.5 system-ui, "Segoe UI", sans-serif;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
