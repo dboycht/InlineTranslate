@@ -7,12 +7,12 @@
 </head>
 <body>
 <main class="wrap">
-  <h1>行内翻译 <span class="ver">v1.00.2</span></h1>
+  <h1>行内翻译 <span class="ver" id="ver">v1.0.0</span></h1>
   <p class="sub">在网页每段文字下方显示译文（不覆盖原文），支持翻译 API 与 AI 大模型。</p>
 
   <section>
     <h2>① 选择翻译服务</h2>
-    <div id="providerList" class="grid"></div>
+    <div id="providerList"></div>
   </section>
 
   <section id="configSection">
@@ -39,8 +39,10 @@
     <button id="saveBtn" class="btn primary">保存设置</button>
     <button id="testBtn" class="btn">测试连接</button>
     <button id="resetBtn" class="btn ghost">恢复默认</button>
+    <span id="dirtyHint" class="dirty-hint" hidden>有未保存的改动</span>
   </section>
 
+  <div id="readyHint" class="ready-hint"></div>
   <div id="msg" class="msg"></div>
 </main>
 

@@ -34,6 +34,17 @@ section h2 { font-size: 15px; margin: 0 0 14px; }
   gap: 10px;
 }
 
+/* 服务分组标题（翻译接口 / AI 大模型） */
+.group-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a8f99;
+  letter-spacing: 0.04em;
+  margin: 4px 0 8px;
+}
+
+.group-title:not(:first-child) { margin-top: 16px; }
+
 .card {
   display: flex;
   gap: 10px;
@@ -42,11 +53,12 @@ section h2 { font-size: 15px; margin: 0 0 14px; }
   border-radius: 10px;
   cursor: pointer;
   transition: border-color .15s, box-shadow .15s;
+  background: #fff;
 }
 
 .card:hover { border-color: #b9c9f5; }
 
-.card input[type="radio"] { margin-top: 3px; }
+.card input[type="radio"] { margin-top: 3px; flex: none; }
 
 .card .name { font-weight: 600; margin-bottom: 3px; }
 .card .desc { font-size: 12px; color: #777; line-height: 1.5; }
@@ -55,6 +67,21 @@ section h2 { font-size: 15px; margin: 0 0 14px; }
   border-color: #4a7dff;
   box-shadow: 0 0 0 2px rgba(74, 125, 255, 0.15);
 }
+
+/* 服务卡片上的「已配置 / 待配置」小标签 */
+.tag {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 0 6px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  vertical-align: 1px;
+}
+
+.tag.ok { color: #1a7f37; background: #e7f6ec; }
+.tag.warn { color: #9a6700; background: #fdf3d8; }
+
 
 .form-item {
   display: flex;
@@ -83,6 +110,54 @@ section h2 { font-size: 15px; margin: 0 0 14px; }
   border-color: #4a7dff;
   box-shadow: 0 0 0 2px rgba(74, 125, 255, 0.15);
 }
+
+/* 缺失的必填字段：整行标红，一眼看出差什么 */
+.form-item.missing > label { color: #c0392b; }
+.form-item.missing input {
+  border-color: #e6a3a3;
+  background: #fffafa;
+}
+
+/* 服务商自动识别提示 */
+.endpoint-note {
+  font-size: 12px;
+  color: #8a8f99;
+  min-height: 16px;
+}
+
+.endpoint-note.ok { color: #1a7f37; }
+
+/* 模型推荐值（可点击填入）+ 文档链接 */
+.field-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.chip {
+  font: inherit;
+  font-size: 12px;
+  padding: 2px 8px;
+  border: 1px solid #d8dbe0;
+  border-radius: 999px;
+  background: #fafbfc;
+  color: #444;
+  cursor: pointer;
+}
+
+.chip:hover { border-color: #4a7dff; color: #3a6cf0; background: #f2f6ff; }
+
+.docs-link {
+  font-size: 12px;
+  color: #4a7dff;
+  text-decoration: none;
+  margin-left: auto;
+}
+
+.docs-link:hover { text-decoration: underline; }
 
 .apply {
   margin-top: 8px;
@@ -130,3 +205,26 @@ section h2 { font-size: 15px; margin: 0 0 14px; }
 
 .msg.ok { color: #1a7f37; }
 .msg.err { color: #c0392b; }
+.msg.warn { color: #9a6700; }
+
+/* 未保存提示 */
+.dirty-hint {
+  font-size: 12px;
+  color: #9a6700;
+  align-self: center;
+}
+
+/* 配置就绪状态条 */
+.ready-hint {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #f5f6f8;
+  color: #666;
+}
+
+.ready-hint.ok { color: #1a7f37; background: #eef9f1; }
+.ready-hint.warn { color: #9a6700; background: #fdf6e3; }
+

@@ -116,13 +116,12 @@
       ? el.querySelector(':scope > .vt-block')
       : el.nextElementSibling;
     if (existing && existing.classList.contains('vt-block')) {
-      if (existing.dataset.src !== srcText) {
-        const t = existing.querySelector('.vt-text');
-        if (t) {
-          t.textContent = translation;
-          existing.dataset.src = srcText;
-        }
-      }
+      // 只在内容真的变化时写 DOM，且以「当前显示的译文」为判据。
+      // ⚠️ 旧实现用「源文本是否变化」判断，导致换服务 / 改目标语言后
+      //    屏幕仍显示旧译文（后台已返回新译文）——见 DEVELOPMENT.md §5.4。
+      const t = existing.querySelector('.vt-text');
+      if (t && t.textContent !== translation) t.textContent = translation;
+      existing.dataset.src = srcText;
       return;
     }
     const block = document.createElement('div');
@@ -133,7 +132,9 @@
     badge.textContent = '译';
     badge.title = '复制译文';
     badge.addEventListener('click', () => {
-      navigator.clipboard.writeText(translation).then(() => {
+      const t = badge.parentElement && badge.parentElement.querySelector('.vt-text');
+      const current = t ? t.textContent : '';
+      navigator.clipboard.writeText(current).then(() => {
         badge.textContent = '✓';
         setTimeout(() => { badge.textContent = '译'; }, 1200);
       }).catch(() => {});
@@ -170,8 +171,10 @@
     updateProgress(0, total);
   }
 
-  function updateProgress(done, total) {
-    if (progressLabel) progressLabel.textContent = '翻译中 ' + done + '/' + total;
+  function updateProgress(done, total, cached) {
+    if (!progressLabel) return;
+    progressLabel.textContent = '翻译中 ' + done + '/' + total + ' 批'
+      + (cached ? '（本地缓存 ' + cached + ' 段）' : '');
   }
 
   function hideProgress() {
@@ -213,7 +216,9 @@
     const chunks = chunkItems(items, maxChars);
     showProgress(chunks.length);
 
-    let done = 0;
+    let done = 0;          // 已完成批次数
+    let translated = 0;    // 已写入译文的段数
+    let cachedCount = 0;   // 命中本地缓存的段数
     for (let ci = 0; ci < chunks.length; ci++) {
       if (sessionId !== id) return; // 已取消或被新任务取代
       const chunk = chunks[ci];
@@ -235,16 +240,22 @@
       }
       (resp.results || []).forEach((r, i) => {
         const it = chunk[i];
-        if (it && r && r.text) upsertBlock(it.el, it.text, r.text);
+        if (!it || !r || !r.text) return;
+        upsertBlock(it.el, it.text, r.text);
+        translated++;
+        if (r.cached) cachedCount++;
       });
-      done += chunk.length;
-      updateProgress(done, chunks.length);
+      done = ci + 1;
+      updateProgress(done, chunks.length, cachedCount);
     }
 
     hideProgress();
-    const failed = items.length - done;
-    if (failed > 0) toast('翻译完成：成功 ' + done + ' 段，失败 ' + failed + ' 段');
-    else if (done > 0) toast('翻译完成，共 ' + done + ' 段');
+    const failed = items.length - translated;
+    if (failed > 0) toast('翻译完成：成功 ' + translated + ' 段，失败 ' + failed + ' 段');
+    else if (translated > 0) {
+      toast('翻译完成，共 ' + translated + ' 段'
+        + (cachedCount ? '（其中 ' + cachedCount + ' 段来自本地缓存，未重复请求）' : ''));
+    }
   }
 
   function removeTranslations() {

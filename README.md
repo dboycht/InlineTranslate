@@ -1,6 +1,6 @@
 # 行内翻译 Inline Translate
 
-> 版本 **v1.00.2** ｜ 适用于 Microsoft Edge（Chromium 内核）与 Google Chrome 及所有 Chromium 系浏览器
+> 版本 **v1.00.3** ｜ 适用于 Microsoft Edge（Chromium 内核）与 Google Chrome 及所有 Chromium 系浏览器
 
 一款浏览器翻译扩展：**不替换、不覆盖原文**，而是把译文插入到每一段文字的下方，方便逐段对照阅读——交互形式参考了「沉浸式翻译」的行内译文设计，本扩展为完全独立的实现。
 
@@ -70,25 +70,44 @@
 
 ## 🤖 AI 大模型配置
 
-### OpenAI 兼容接口
+设置页的「AI 大模型 · OpenAI 兼容接口」已内置常用服务商，**选中服务商后会自动填好接口地址与推荐模型**，你只需要粘贴自己的 API Key：
 
-设置页内置常用服务预设，一键填入 Base URL 与模型：
-
-| 服务 | Base URL | 推荐模型 | 申请 / 安装 |
+| 服务商 | 接口地址（自动填入） | 推荐模型 | 说明 |
 | --- | --- | --- | --- |
-| OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` | [platform.openai.com/api-keys](https://platform.openai.com/api-keys) |
-| DeepSeek | `https://api.deepseek.com` | `deepseek-chat` | [platform.deepseek.com/api_keys](https://platform.deepseek.com/api_keys) |
-| Moonshot Kimi | `https://api.moonshot.cn/v1` | `kimi-latest` | [platform.moonshot.cn](https://platform.moonshot.cn/) |
-| 智谱 GLM | `https://open.bigmodel.cn/api/paas/v4` | `glm-4-flash` | [open.bigmodel.cn](https://open.bigmodel.cn/) |
-| Ollama 本地 | `http://localhost:11434/v1` | `llama3.1` 等 | 本地 `ollama pull llama3.1` 即可 |
+| **DeepSeek** | `https://api.deepseek.com` | `deepseek-flash` | 国内直连，性价比高，闲时半价 |
+| **智谱 GLM** | `https://open.bigmodel.cn/api/paas/v4` | `glm-4.7-flash` | 有**免费**模型，适合先试水 |
+| **硅基流动** | `https://api.siliconflow.cn/v1` | `Qwen/Qwen3-8B` | 国内聚合，开源模型便宜 |
+| **Moonshot Kimi** | `https://api.moonshot.cn/v1` | `kimi-k3` | 国内直连，单价偏高 |
+| **阿里通义千问** | `https://dashscope.aliyuncs.com/compatible-mode/v1` | `qwen-flash`、`qwen-mt-turbo` | 有**翻译专用**模型 |
+| **OpenRouter** | `https://openrouter.ai/api/v1` | `deepseek/deepseek-v4-flash` | 一个密钥用几百个模型 |
+| **OpenAI** | `https://api.openai.com/v1` | `gpt-5-nano` | 国内需自备网络条件 |
+| **Google Gemini** | `https://generativelanguage.googleapis.com/v1beta/openai` | `gemini-2.5-flash-lite` | 有免费额度 |
+| **Ollama（本地）** | `http://localhost:11434/v1` | `translategemma:4b` | **完全免费、不联网**，见下 |
+| 其它 | 手动填写 | — | MiniMax、Groq、Together、自建 vLLM 等 |
 
-任何兼容 OpenAI `/chat/completions` 接口的服务都可选择「手动填写」接入自定义 Base URL。
+要点：
 
-> 不支持 `response_format: json_object` 的服务（如部分 Ollama 模型）会自动降级重试，无需手动干预。
+- **每种服务商的密钥分开保存**：切换服务商不会覆盖之前填好的密钥，来回切也不丢。
+- **模型名可以自己改**：下拉框只是推荐值（模型 ID 变动很频繁，旧 ID 会直接报 404），点「查看可用模型列表」可直达官方文档核对。
+- **接口地址自动识别**：手动粘贴一个地址，界面会提示识别成了哪家服务。
+- **「测试连接」用真实文本试翻两段**，模型名写错、密钥无效、网络不通都会当场报出来并给出提示，不必先保存。
+
+### 本地运行（Ollama，免费且不联网）
+
+装上 [Ollama](https://ollama.com) 后拉一个模型即可，无需任何密钥：
+
+```bash
+ollama pull translategemma:4b     # 翻译专用（Google TranslateGemma，55 语种，约 3.3GB）
+ollama pull hy-mt2:7b             # 翻译专用（腾讯混元，33 语种，约 4.6GB）
+ollama pull qwen3:8b              # 通用，中文强
+```
+
+然后在设置里选「Ollama（本地）」，接口地址会自动填成 `http://localhost:11434/v1`。
+**如果设置页提示连接失败，通常是 Ollama 没启动**（命令行执行 `ollama serve` 即可）。
 
 ### Anthropic Claude
 
-选择「AI 大模型 · Anthropic Claude」，填入 API Key，默认模型 `claude-haiku-4-5-20251001`（速度快、成本低），也可切换 `claude-sonnet-5` 等更高阶模型。
+选择「AI 大模型 · Anthropic Claude」，填入 API Key，默认模型 `claude-sonnet-5`，也可切换 `claude-haiku-4-5`（更快更省）或 `claude-opus-5`（最强）。
 
 ### 工作原理（AI 模式）
 
@@ -121,11 +140,11 @@
 
 ```
 inline-translate/
-├── manifest.json        # 扩展清单（MV3，版本 1.00.1）
-├── background.js        # 后台脚本：各翻译 API 调用、分批、缓存、测试连接、快捷键
+├── manifest.json        # 扩展清单（MV3，版本号单一来源）
+├── background.js        # 后台脚本：各翻译 API 调用、分批、缓存、重试、测试连接、快捷键
 ├── content.js           # 内容脚本：段落提取、译文块插入、进度 UI
 ├── content.css          # 译文块与页面内 UI 样式
-├── providers.js         # 共享配置：服务元信息（含申请链接）、语言映射、默认设置
+├── providers.js         # 共享配置：服务元信息、AI 服务目录、语言映射、默认设置
 ├── crypto-utils.js      # MD5（百度签名）与 SHA-256（有道签名）工具
 ├── popup.html / popup.js / popup.css   # 工具栏弹窗
 ├── options.html / options.js / options.css  # 设置页
@@ -138,6 +157,16 @@ inline-translate/
 ---
 
 ## 📝 版本记录
+
+### v1.00.3（2026-09-12）
+
+- **模型配置界面重做**：新增「服务商」下拉，选中后自动填好接口地址与推荐模型；模型改为**下拉建议 + 可自由填写**，并直接给出各厂商「查看可用模型列表」的文档链接
+- **每个服务商的密钥独立保存**：切换服务商不再丢失已填内容（此前切换会清空未保存的密钥）
+- **服务商与模型清单更新到 2026-09 现状**：DeepSeek（`deepseek-flash`）、智谱 GLM（含免费模型）、硅基流动、Kimi K3、通义千问（含翻译专用模型）、OpenRouter、OpenAI、Gemini，以及 **Ollama 本地翻译专用模型**（TranslateGemma / 混元 MT）
+- **判定与提示更友好**：必填项缺失时高亮对应输入框并说明还差什么；服务卡片直接标注「已配置 / 待配置」；粘贴接口地址会自动识别服务商；测试连接改用真实文本试翻两段，并按错误类型（密钥、模型名、网络）给出对应建议
+- **操作逻辑**：设置页有未保存改动时会有提示并阻止误关闭；弹窗显示完整的「服务商 · 模型 · 目标语言」，翻译不再立刻关闭弹窗，配置缺失时可直接跳转设置
+- **修复**：免费 Google 服务此前批量请求会导致**第 2 段起译文错位或丢失**，现改为逐段请求；**更换服务或目标语言后译文不刷新**；请求新增 45 秒超时与限流/网络重试（此前会一直转圈）；取消标记不再无限累积
+- **修复**：修正缓存键中混入的不可见控制字符（该文件此前被 git 判定为二进制文件），并移除缓存键中带来隐患的分隔方式
 
 ### v1.00.2（2026-08-03）
 
@@ -166,7 +195,19 @@ inline-translate/
 A：以下情况会被有意跳过：字符数 < 4、纯数字 / 符号、超过 3000 字符、位于导航 / 菜单 / 代码块中、原文已是目标语言（如目标为中文时跳过中文段落）。AI 模式下如遇模型返回异常，可在设置中调小「每批最大字符数」后重试。
 
 **Q：翻译结果顺序错乱或数量不对？**
-A：AI 模型偶发返回数量与请求不一致时会明确报错；请调小「每批最大字符数」重试。免费 Google 接口偶发限流，稍等片刻重试即可。
+A：AI 模型偶发返回数量与请求不一致时会明确报错；请调小「每批最大字符数」重试。免费 Google 接口偶发限流，稍等片刻重试即可（v1.00.3 起已改为逐段请求，不再出现第 2 段起错位）。
+
+**Q：AI 模型报「无法解析为 json」或返回空内容？**
+A：多数是**模型的思考模式**在作怪——带思考的模型会先输出推理过程，导致 JSON 解析失败。建议：① 在设置里换成该服务商的 `flash` / 轻量档模型；② 关闭模型的思考模式（部分服务无法关闭）；③ 若无改善，点「测试连接」看具体报错，再核对模型 ID 是否正确。
+
+**Q：提示「模型不存在 / 404」？**
+A：模型 ID 变更很频繁（例如 Kimi 的 `moonshot-v1-*` 与 `kimi-latest` 已下线）。请在设置里点「查看可用模型列表」到官方文档核对，或直接点推荐模型气泡填入当前可用的 ID。
+
+**Q：本地 Ollama 连不上？**
+A：先在命令行执行 `ollama serve` 确认服务已启动，并用 `ollama list` 确认模型已拉取；接口地址用 `http://localhost:11434/v1`，API Key 填任意值（如 `ollama`）即可，Ollama 会忽略它。
+
+**Q：为什么重新翻译同一页没有产生新费用？**
+A：译文有本地缓存，相同文本 + 相同服务 + 相同目标语言会直接复用。翻译完成的提示里会写明有多少段来自缓存。
 
 **Q：API Key 安全吗？**
 A：密钥保存在浏览器本地 `storage.local`（不会跨设备同步），仅在请求对应服务时随请求发送。建议不要在公共电脑上保存密钥。

@@ -29,6 +29,9 @@ header {
 }
 
 .status a { color: #4a7dff; }
+.status.ok { color: #1a7f37; background: #eef9f1; border-color: #cfe9d8; }
+.status.warn { color: #9a6700; background: #fdf6e3; border-color: #f0e0b0; }
+.status.err { color: #c0392b; background: #fdeeee; border-color: #f0c8c8; }
 
 .lang-row {
   display: flex;
