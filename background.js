@@ -136,7 +136,7 @@ function chunkByBytes(texts, maxBytes) {
    - Google 的响应只有一条句段数组（所有 q 的译文按顺序拼在一起，无法可靠切回原段落）；
    - 百度按换行拆分结果，段落文字自带换行就会错位。
    因此这两种服务强制 maxItems=1：一次只翻译一段，从根上消除错位。
-   （v1.00.2 及更早版本在这里批量发送，导致第 2 段起译文错位或丢失。） */
+   （v1.0.2 及更早版本在这里批量发送，导致第 2 段起译文错位或丢失。） */
 function getChunks(provider, texts, settings) {
   switch (provider) {
     case 'google':    return chunkTexts(texts, 5000, 1);

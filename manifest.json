@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "行内翻译 Inline Translate",
-  "version": "1.00.3",
+  "version": "1.0.3",
   "description": "在网页每段文字下方显示译文（不覆盖原文），支持 Google / DeepL / 百度 / 有道等翻译 API，以及 OpenAI / DeepSeek / Claude 等 AI 大模型。",
   "author": "VibeCoding",
   "icons": {

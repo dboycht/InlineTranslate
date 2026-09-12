@@ -34,7 +34,7 @@ t('openai.model 预填', d.providers.openai.model === 'deepseek-flash', d.provid
 t('ollama 槽位密钥占位 ollama', d.providers.openai.addresses.ollama.apiKey === 'ollama');
 t('每种端点都有槽位', AI_ENDPOINTS.every(e => d.providers.openai.addresses[e.id]), '缺槽位');
 
-console.log('\n[2] 旧扁平结构迁移（v1.00.2 用户升级）');
+console.log('\n[2] 旧扁平结构迁移（v1.0.2 用户升级）');
 const legacy = mergeSettings({
   provider: 'openai',
   providers: { openai: { baseUrl: 'https://api.moonshot.cn/v1', apiKey: 'sk-old', model: 'kimi-latest' } },
